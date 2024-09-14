@@ -52,7 +52,7 @@ env:
   WRT_TEST: ${{inputs.WRT_TEST}}
 
 jobs:
-  wrt_core:
+  core:
     name: ${{inputs.WRT_SOURCE}}
     runs-on: ubuntu-latest
     steps:
@@ -115,17 +115,9 @@ jobs:
         run: |
           find ./ -maxdepth 3 -type f -iregex ".*\(txt\|sh\)$" -exec dos2unix {} \; -exec chmod +x {} \;
 
-      - name: Check Patches
-        run: |
-          if [ -f "$GITHUB_WORKSPACE/Patches/Patches.sh" ]; then
-            $GITHUB_WORKSPACE/Patches/Patches.sh
-          else
-            echo "No patches need to be installed!"
-          fi
-
       - name: Check Caches
-        if: env.WRT_TEST != 'true'
         id: check-cache
+        if: env.WRT_TEST != 'true'
         uses: actions/cache@main
         with:
           key: ${{env.WRT_TARGET}}-${{env.WRT_VER}}-${{env.WRT_HASH}}
@@ -177,7 +169,7 @@ jobs:
 
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
-          make defconfig
+          make defconfig -j$(nproc)
 
       - name: Download Packages
         if: env.WRT_TEST != 'true'
@@ -191,7 +183,7 @@ jobs:
         run: |
           cd ./wrt/
 
-          make -j$(nproc) || make -j1 V=s
+          make -j$(nproc) || make -j$(nproc) V=s
 
       - name: Machine Information
         run: |
