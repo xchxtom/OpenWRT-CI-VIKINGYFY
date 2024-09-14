@@ -3,9 +3,11 @@ name: QCA-ALL
 
 #CI计划
 on:
-  #自动编译：每天早上4点
-  #schedule:
-    #- cron: 0 20 * * *
+  #自动编译：当Auto-Clean运行完成后
+  #workflow_run:
+    #workflows: ["Auto-Clean"]
+    #types:
+     # - completed
   #手动编译
   workflow_dispatch:
     inputs:
@@ -24,7 +26,7 @@ permissions: write-all
 
 #CI任务
 jobs:
-  wrt_config:
+  config:
     name: ${{matrix.TARGET}}
     strategy:
       fail-fast: false
@@ -43,7 +45,7 @@ jobs:
       #默认主机名
       WRT_NAME: XWRT
       #默认WIFI名
-      WRT_WIFI: RT-AC1200-JD6
+      WRT_WIFI: XWRT
       #默认地址
       WRT_IP: 192.168.68.1
       #默认密码，仅作提示，修改无用
