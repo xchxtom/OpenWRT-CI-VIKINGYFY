@@ -28,5 +28,5 @@ CONFIG_TARGET_DEVICE_PACKAGES_qualcommax_ipq60xx_DEVICE_jdcloud_ax6600="ipq-wifi
 CONFIG_PACKAGE_kmod-ath11k=y
 CONFIG_PACKAGE_kmod-ath11k-ahb=y
 CONFIG_PACKAGE_kmod-ath11k-pci=y
-CONFIG_PACKAGE_ath11k-firmware-ipq6018=y
+CONFIG_PACKAGE_ath11k-firmware-ipq6018=m
 $CONFIG_PACKAGE_ath11k-firmware-qcn9074=y
