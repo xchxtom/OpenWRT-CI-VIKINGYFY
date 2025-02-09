@@ -130,3 +130,8 @@ CONFIG_PACKAGE_shadowsocks-libev-ss-server=y
 CONFIG_PACKAGE_libopenssl1.1=y
 CONFIG_PACKAGE_libudns=y
 CONFIG_PACKAGE_luci-proto-wireguard=y
+CONFIG_PACKAGE_opkg=y
+CONFIG_OPKG_USE_CURL=y
+# CONFIG_PACKAGE_apk-mbedtls is not set
+# CONFIG_PACKAGE_apk-openssl is not set
+# CONFIG_USE_APK is not set
