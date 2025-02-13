@@ -206,6 +206,9 @@ jobs:
         run: |
           cd ./wrt/ && mkdir -p ./upload/
 
+          echo "Current directory: $(pwd)"
+          ls -la
+
           cp -f ./.config ./upload/Config_"$WRT_TARGET"_"$WRT_VER"_"$WRT_DATE".txt
 
           if [[ $WRT_TEST != 'true' ]]; then
