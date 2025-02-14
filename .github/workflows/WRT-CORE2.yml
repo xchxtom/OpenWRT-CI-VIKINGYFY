@@ -221,17 +221,20 @@ jobs:
               for FILE in $(find ./bin/targets/ -type f -iname "*$TYPE*.*") ; do
                 EXT=$(basename $FILE | cut -d '.' -f 2-)
                 NAME=$(basename $FILE | cut -d '.' -f 1 | grep -io "\($TYPE\).*")
-                NEW_FILE="$WRT_VER"_"$NAME"_"$WRT_DATE"."$EXT"
+                NEW_FILE="$WRT_VER"_"$NAME"_"$WRT_DATE"_"$KVER"."$EXT"
                 mv -f "$FILE" "./upload/$NEW_FILE"
               done
             done
 
             # 移动其他所有文件（包括固件）到 upload
             find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
+            #移动ipk到upload
+            mkdir -p ./packages
+            mv -f ./bin/packages/*/*/*.ipk packages
+            tar -zcf Packages.tar.gz packages
+            mv -f Packages.tar.gz ./upload/
+            rm -rf packages
 
-            # 处理 packages 目录
-            mkdir -p ./upload/packages
-            find ./bin/packages/ -type f -exec cp --parents {} ./upload/packages/ \;
           fi
 
           echo "WRT_KVER=${KVER:-none}" >> $GITHUB_ENV
