@@ -216,7 +216,7 @@ jobs:
             KVER=$(find ./bin/targets/ -type f -name "*.manifest" -exec grep -oP '^kernel - \K[\d\.]+' {} \;)
             #移动ipk到upload
             mkdir -p ./packages
-            mv -f ./bin/targets/packages/*/*/*.apk packages
+            mv -f ./bin/targets/packages/*.apk packages
             tar -zcf Package.tar.gz packages
 
             find ./bin/targets/ -iregex ".*\(buildinfo\|json\|manifest\|sha256sums\|packages\)$" -exec rm -rf {} +
