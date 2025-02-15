@@ -204,17 +204,16 @@ jobs:
 
       - name: Package Firmware
         run: |
-          cd ./wrt/ && mkdir -p ./upload/
+          cd ./wrt/ && mkdir ./upload/
 
-          echo "Current directory: $(pwd)"
-          ls -la
+          #echo "Current directory: $(pwd)"
+          #ls -la
 
           cp -f ./.config ./upload/Config_"$WRT_TARGET"_"$WRT_VER"_"$WRT_DATE".txt
 
-          if [[ $WRT_TEST = 'true' ]]; then
+          if [[ $WRT_TEST != 'true' ]]; then
             KVER=$(find ./bin/targets/ -type f -name "*.manifest" -exec grep -oP '^kernel - \K[\d\.]+' {} \;)
 
-            # 删除不必要的 buildinfo、json、manifest 等文件，但 **保留 packages**
             find ./bin/targets/ -iregex ".*\(buildinfo\|json\|manifest\|sha256sums\)$" -exec rm -rf {} +
 
             for TYPE in $WRT_TYPE ; do
@@ -222,18 +221,19 @@ jobs:
                 EXT=$(basename $FILE | cut -d '.' -f 2-)
                 NAME=$(basename $FILE | cut -d '.' -f 1 | grep -io "\($TYPE\).*")
                 NEW_FILE="$WRT_VER"_"$NAME"_"$WRT_DATE"_"$KVER"."$EXT"
-                mv -f "$FILE" "./upload/$NEW_FILE"
+                mv -f $FILE ./upload/$NEW_FILE
               done
             done
 
+            #移动ipk到upload
+            #mkdir -p ./packages
+            #mv -f ./bin/packages/*/*/*.ipk packages
+            #tar -zcf Packages.tar.gz packages
+            #mv -f Packages.tar.gz ./upload/
+            #rm -rf packages
+
             # 移动其他所有文件（包括固件）到 upload
             find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
-            #移动ipk到upload
-            mkdir -p ./packages
-            mv -f ./bin/packages/*/*/*.ipk packages
-            tar -zcf Packages.tar.gz packages
-            mv -f Packages.tar.gz ./upload/
-            rm -rf packages
 
           fi
 
