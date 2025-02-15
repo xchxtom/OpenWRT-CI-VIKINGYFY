@@ -171,7 +171,7 @@ jobs:
         run: |
           cd ./wrt/
 
-          cat $GITHUB_WORKSPACE/Config/$WRT_TARGET.txt $GITHUB_WORKSPACE/Config/GENERAL2.txt >> .config
+          cat $GITHUB_WORKSPACE/Config/$WRT_TARGET.txt $GITHUB_WORKSPACE/Config/GENERAL.txt >> .config
 
           $GITHUB_WORKSPACE/Scripts/Settings.sh
 
