@@ -130,6 +130,6 @@ CONFIG_OPKG_USE_CURL=y
 CONFIG_PACKAGE_sing-box=y
 CONFIG_PACKAGE_luci-app-sqm=y
 CONFIG_PACKAGE_luci-i18n-sqm-zh-cn=y
-CONFIG_PACKAGE_sqm-scripts=y
+CONFIG_PACKAGE_sqm-scripts=n
 CONFIG_PACKAGE_sqm-scripts-nss=y
 CONFIG_PACKAGE_luci-app-tailscale=y
