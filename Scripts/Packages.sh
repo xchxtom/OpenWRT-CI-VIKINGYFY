@@ -41,9 +41,45 @@ UPDATE_PACKAGE() {
 	fi
 }
 
+# 新增：按需稀疏检出并更新 dockerman（从外部仓库引入）
+update_dockerman() {
+    local path="$BUILD_DIR/feeds/luci/applications/luci-app-dockerman"
+    local repo_url="https://github.com/lisaac/luci-app-dockerman.git"
+
+    if [ -d "$path" ]; then
+        echo "正在更新 dockerman..."
+        _sync_luci_lib_docker || return
+        
+        cd "$BUILD_DIR/feeds/luci/applications" || return
+        \rm -rf "luci-app-dockerman"
+
+        if ! git clone --filter=blob:none --no-checkout "$repo_url" dockerman; then
+            echo "错误：从 $repo_url 克隆 dockerman 仓库失败" >&2
+            exit 1
+        fi
+        cd dockerman || return
+
+        git sparse-checkout init --cone
+        git sparse-checkout set applications/luci-app-dockerman || return
+
+        git checkout --quiet
+
+        mv applications/luci-app-dockerman ../luci-app-dockerman || return
+        cd .. || return
+        \rm -rf dockerman
+        cd "$BUILD_DIR"
+
+        if declare -F docker_stack_sync_dockerman_nftables_compat >/dev/null 2>&1; then
+            docker_stack_sync_dockerman_nftables_compat "$BUILD_DIR" "0" || return 1
+        fi
+
+        echo "dockerman 更新完成"
+    fi
+}
+
 # 调用示例
 # UPDATE_PACKAGE "OpenAppFilter" "destan19/OpenAppFilter" "master" "" "custom_name1 custom_name2"
-# UPDATE_PACKAGE "open-app-filter" "destan19/OpenAppFilter" "master" "" "luci-app-appfilter oaf" 这样会把原有的open-app-filter，luci-app-appfilter，oaf相关组件删除，不会出现coremark错误。
+# UPDATE_PACKAGE "open-app-filter" "destan19/OpenAppFilter" "master" "" "luci-app-appfilter oaf" 这样会把原有的open-app-filter，luci-app-appfilter，oaf相关组件删除，不会出现cor[...]
 
 # UPDATE_PACKAGE "包名" "项目地址" "项目分支" "pkg，可选，从大杂烩中单独提取包名插件"
 UPDATE_PACKAGE "argon" "sbwml/luci-theme-argon" "openwrt-25.12"
