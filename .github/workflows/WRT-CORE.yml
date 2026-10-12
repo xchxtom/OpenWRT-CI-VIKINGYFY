@@ -167,6 +167,8 @@ jobs:
 
       - name: Custom Packages
         run: |
+          export BUILD_DIR="$GITHUB_WORKSPACE/wrt"
+          echo "BUILD_DIR=$BUILD_DIR"
           cd ./wrt/
 
           $GITHUB_WORKSPACE/Scripts/Packages.sh
