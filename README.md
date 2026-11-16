@@ -1,3 +1,19 @@
+# 高质量<免费>交流群
+
+[IPQ技术讨论群](https://qm.qq.com/q/v7nMhzB4oU)
+
+# 高质量<付费>中转站
+
+[Krill-Code](https://www.krill-code.com/register?invite=959NHQCZGT)
+
+# 本地编译器
+
+https://github.com/VIKINGYFY/OWRT-Tools.git
+
+# 自用修改版插件
+
+https://github.com/VIKINGYFY/packages.git
+
 # OpenWRT-CI
 
 官方版：
@@ -12,11 +28,7 @@ https://github.com/VIKINGYFY/immortalwrt.git
 
 高通版-沉心：
 
-https://github.com/chenxin527/uboot-ipq60xx-emmc-build.git
-
-https://github.com/chenxin527/uboot-ipq60xx-nand-build.git
-
-https://github.com/chenxin527/uboot-ipq60xx-nor-build.git
+https://github.com/chenxin527/uboot-qsdk12.5-build.git
 
 高通版-小猪：
 
@@ -46,5 +58,12 @@ Scripts——自定义脚本
 
 Config——自定义配置
 
-#
-[![Stargazers over time](https://starchart.cc/VIKINGYFY/OpenWRT-CI.svg?variant=adaptive)](https://starchart.cc/VIKINGYFY/OpenWRT-CI)
+## Star History
+
+<a href="https://www.star-history.com/?repos=vikingyfy%2Fopenwrt-ci&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=vikingyfy/openwrt-ci&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=vikingyfy/openwrt-ci&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=vikingyfy/openwrt-ci&type=date&legend=top-left" />
+ </picture>
+</a>
