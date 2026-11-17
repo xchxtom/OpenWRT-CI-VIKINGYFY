@@ -1,0 +1,14 @@
+# Docker（nftables 后端）放行规则
+# 由 fw4 自动 include 到 table inet fw4 的 chain forward 末尾、
+# 在 policy drop / jump handle_reject 之前生效，因此不必再给每个
+# docker 网桥（docker0、br-xxxxxxxxxxxx）手工建防火墙 zone。
+
+# 默认网桥与自定义网桥的进出流量
+iifname "docker*" accept comment "docker: from container bridge"
+oifname "docker*" accept comment "docker: to container bridge"
+
+# Docker 默认地址池从 172.17.0.0/16 起，最多到 172.31.0.0/16，
+# 用于覆盖 br-xxxxxxxxxxxx 自定义网络（其网桥名无法用固定前缀匹配）。
+# 若局域网本身就规划在 172.16.0.0/12 内，请删掉下面两行改用 zone 方案。
+ip saddr 172.16.0.0/12 accept comment "docker: container pool"
+ip daddr 172.16.0.0/12 accept comment "docker: container pool"
