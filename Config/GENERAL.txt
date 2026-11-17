@@ -156,3 +156,10 @@ CONFIG_PACKAGE_sqm-scripts-nss=y
 CONFIG_PACKAGE_chinadns-ng=y
 CONFIG_PACKAGE_unzip=y
 CONFIG_PACKAGE_luci-app-dockerman=y
+#iStore 软件中心与 iStoreX 首页
+CONFIG_PACKAGE_luci-app-store=y
+CONFIG_PACKAGE_luci-app-istorex=y
+CONFIG_PACKAGE_luci-app-quickstart=y
+CONFIG_PACKAGE_luci-lib-taskd=y
+CONFIG_PACKAGE_luci-lib-xterm=y
+CONFIG_PACKAGE_taskd=y
