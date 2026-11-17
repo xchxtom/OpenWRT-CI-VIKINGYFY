@@ -59,6 +59,8 @@ env:
   WRT_SOURCE: ${{inputs.WRT_SOURCE}}
   WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
   WRT_TEST: ${{inputs.WRT_TEST}}
+  #Docker 启用范围：all 全部平台，auto 仅 X86/ROCKCHIP，none 不启用
+  WRT_DOCKER: all
 
 jobs:
   core:
@@ -165,6 +167,19 @@ jobs:
           echo "1" > ./wrt/tmp/.build
           echo "restored build cache: ${{steps.cache-restore.outputs.cache-matched-key}}"
 
+      - name: Extra Feeds
+        run: |
+          cd ./wrt/
+
+          #iStore / iStoreX 官方源
+          grep -q 'src-git istore ' feeds.conf.default || echo 'src-git istore https://github.com/linkease/istore.git;main' >> feeds.conf.default
+          grep -q 'src-git nas ' feeds.conf.default || echo 'src-git nas https://github.com/linkease/nas-packages.git;master' >> feeds.conf.default
+          grep -q 'src-git nas_luci ' feeds.conf.default || echo 'src-git nas_luci https://github.com/linkease/nas-packages-luci.git;main' >> feeds.conf.default
+
+          echo "======================="
+          cat feeds.conf.default
+          echo "======================="
+
       - name: Update Feeds
         run: |
           cd ./wrt/
@@ -191,9 +206,28 @@ jobs:
           fi
 
           $GITHUB_WORKSPACE/Scripts/Settings.sh
+          $GITHUB_WORKSPACE/Scripts/Docker.sh
           $GITHUB_WORKSPACE/.github/scripts/prepare-build-host.sh
 
           make defconfig -j$(nproc) && make clean -j$(nproc)
+
+      - name: Verify Nftables Only
+        run: |
+          cd ./wrt/
+
+          FOUND=0
+          for PKG in iptables iptables-nft iptables-zz-legacy iptables-mod-extra ip6tables kmod-ipt-core kmod-ipt-nat; do
+            if grep -q "^CONFIG_PACKAGE_${PKG}=y" .config; then
+              echo "::warning title=iptables 泄漏::$PKG 被其它依赖链引入，请检查"
+              FOUND=1
+            fi
+          done
+
+          grep -q "^CONFIG_PACKAGE_dockerd=y" .config && echo "dockerd: on" || echo "dockerd: off"
+          grep -q "^CONFIG_PACKAGE_luci-app-store=y" .config && echo "istore: on" || echo "istore: off"
+          grep -q "^CONFIG_PACKAGE_luci-app-istorex=y" .config && echo "istorex: on" || echo "istorex: off"
+
+          [ "$FOUND" -eq 0 ] && echo "nftables only: ok" || echo "nftables only: 存在 iptables 包"
 
       - name: Prepare Rust Toolchain
         if: ${{ !inputs.WRT_TEST }}
